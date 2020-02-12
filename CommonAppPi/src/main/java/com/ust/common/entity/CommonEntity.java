@@ -33,6 +33,12 @@ public class CommonEntity {
 	
 	@Column(name="modified_user")
 	private Date modifiedUser;
+	
+	@Column(name="eff_date_from")
+	private Date effDateFrom;
+	
+	@Column(name="eff_date_to")
+	private Date effDateTo;
 
 	public Long getId() {
 		return id;
@@ -89,6 +95,20 @@ public class CommonEntity {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	
-	
+
+	public Date getEffDateFrom() {
+		return effDateFrom;
+	}
+
+	public void setEffDateFrom(Date effDateFrom) {
+		this.effDateFrom = effDateFrom;
+	}
+
+	public Date getEffDateTo() {
+		return effDateTo;
+	}
+
+	public void setEffDateTo(Date effDateTo) {
+		this.effDateTo = effDateTo;
+	}
 }
