@@ -38,8 +38,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void saveUser(UserBO user) {
-        userDomain.saveUser(user);
+    public UserBO saveUser(UserBO user) {
+        return userDomain.saveUser(user);
     }
 
 
@@ -91,5 +91,23 @@ public class UserServiceImpl implements UserService {
         return userDomain.searchBy(keyword, criteria);
 
     }
+
+
+
+	@Override
+	public Page<UserBO> findAll(int page, int count) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public void delete(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+    
+    
 
 }

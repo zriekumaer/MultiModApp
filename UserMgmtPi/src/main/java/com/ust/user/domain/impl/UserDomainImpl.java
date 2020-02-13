@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.ust.common.entity.UserEntity;
 import com.ust.user.domain.UserDomain;
@@ -28,14 +27,17 @@ public class UserDomainImpl implements UserDomain {
 		return userRepository.findByEmail(email);
 	}
 
-	public void saveUser(UserBO user) {
+	public UserBO saveUser(UserBO user) {
 		UserEntity entity = new UserEntity();
+		UserBO userBO = new UserBO();
 		// Convert Bo to Entity
 		if (entity.getId() == null) {
 			entity.setPassword(entity.getPassword());
 			entity.setActive(Boolean.TRUE);
 		}
 		userRepository.save(entity);
+		//convert entity to Bo
+		return userBO;
 	}
 
 	public Page<UserBO> searchByTerm(String name, Pageable pageable) {
@@ -75,5 +77,17 @@ public class UserDomainImpl implements UserDomain {
         //Convert entities to list;
         return list;
     }
+
+	@Override
+	public Page<UserBO> findAll(int page, int count) {
+		return null;
+	}
+
+	@Override
+	public void delete(String id) {
+		
+	}
+	
+	
 
 }

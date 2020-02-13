@@ -12,7 +12,7 @@ public interface UserService {
 	
     public UserBO findUserByEmail(String email);
 
-    public void saveUser(UserBO user);
+    public UserBO saveUser(UserBO user);
 
     public Boolean removeAll();
 
@@ -25,4 +25,8 @@ public interface UserService {
     public Page<UserBO> listUsers(Pageable pageable);
 
     public List<UserBO> searchBy(String keyword, String criteria);
+    
+    public Page<UserBO> findAll(int page,int count);
+    
+    public void delete (String id);
 }

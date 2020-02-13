@@ -38,8 +38,8 @@ public class TicketController {
 	@Autowired
 	private TicketService ticketService;
 	
-//	@Autowired
-//	protected JwtTokenUtil jwtTokenUtil;
+	@Autowired
+	protected JwtTokenUtil jwtTokenUtil;
 	
 //	@Autowired
 //	private UserService userService;
