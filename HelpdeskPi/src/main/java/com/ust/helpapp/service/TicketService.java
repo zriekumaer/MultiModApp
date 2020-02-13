@@ -19,7 +19,7 @@ public interface TicketService {
 	
 	Iterable<ChangeStatus> listChangeStatus(String ticketId);
 	
-	Page<Ticket> findByCurrentUser(int page, int count, String userId);
+	Page<Ticket> findByCurrentUser(int page, int count, int userId);
 	
 	Page<Ticket> findByParameters(int page, int count, String title, String status,String priority);
 	

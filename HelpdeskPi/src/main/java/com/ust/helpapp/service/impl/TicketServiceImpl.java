@@ -69,4 +69,9 @@ public class TicketServiceImpl implements TicketService {
 			String priority, String assignedUser) {
 		return ticketDomain.findByParametersAndAssignedUser(page, count, title, status, priority, assignedUser);
 	}
+
+	public Page<Ticket> findByCurrentUser(int page, int count, int userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

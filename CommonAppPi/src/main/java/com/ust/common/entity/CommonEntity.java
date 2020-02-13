@@ -29,7 +29,7 @@ public class CommonEntity {
 	private Date modifiedDate;
 	
 	@Column(name="created_user")
-	private Date createdUser;
+	private Integer createdUser;
 	
 	@Column(name="modified_user")
 	private Date modifiedUser;
@@ -72,11 +72,11 @@ public class CommonEntity {
 		this.modifiedDate = modifiedDate;
 	}
 
-	public Date getCreatedUser() {
+	public Integer getCreatedUser() {
 		return createdUser;
 	}
 
-	public void setCreatedUser(Date createdUser) {
+	public void setCreatedUser(Integer userId) {
 		this.createdUser = createdUser;
 	}
 

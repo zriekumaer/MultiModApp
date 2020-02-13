@@ -1,6 +1,7 @@
 package com.ust.helpapp.ui;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ust.common.enums.ProfileEnum;
 import com.ust.common.enums.StatusEnum;
 import com.ust.common.response.Response;
 import com.ust.common.response.SingleResponse;
@@ -29,6 +31,9 @@ import com.ust.helpapp.entity.ChangeStatus;
 import com.ust.helpapp.entity.Ticket;
 import com.ust.helpapp.service.TicketService;
 import com.ust.helpapp.service.bo.Summary;
+import com.ust.user.security.JwtTokenUtil;
+import com.ust.user.service.UserService;
+import com.ust.user.service.bo.UserBO;
 
 @RestController
 @RequestMapping(value="/api/ticket")
@@ -41,8 +46,8 @@ public class TicketController {
 	@Autowired
 	protected JwtTokenUtil jwtTokenUtil;
 	
-//	@Autowired
-//	private UserService userService;
+	@Autowired
+	private UserService userService;
 	
 	@PostMapping
 	@PreAuthorize("hasAnyRole('CUSTOMER')")
@@ -80,10 +85,10 @@ public class TicketController {
 		}
 	}
 	
-	private User userFromRequest(HttpServletRequest request) {
+	private UserBO userFromRequest(HttpServletRequest request) {
 		String token = request.getHeader("Authorization");
 		String email = jwtTokenUtil.getUsernameFromToken(token);
-		return this.userService.findbyEmail(email);
+		return this.userService.findUserByEmail(email);
 	}
 	
 	
@@ -94,23 +99,27 @@ public class TicketController {
 	
 	@PutMapping
 	@PreAuthorize("hasAnyRole('CUSTOMER')")
-	public ResponseEntity<Response<Ticket>> update(HttpServletRequest request, @RequestBody Ticket ticket,
+	public ResponseEntity<SingleResponse<Ticket>> update(HttpServletRequest request, @RequestBody Ticket ticket,
 			BindingResult result){
 		SingleResponse<Ticket> response = new SingleResponse<Ticket>();
 		try {
 			validateUpdateTicket(ticket,result);
-			if(result.hasErrors()) {
-				result.getAllErrors().forEach(error-> response.getErrors().add(error.getDefaultMessage()));
+			if (result.hasErrors()) {
+				List<String> errors = new ArrayList<String>();
+				for (ObjectError error : result.getAllErrors()) {
+					errors.add(error.getDefaultMessage());
+				}
+				response.setErrors(errors);
 				return ResponseEntity.badRequest().body(response);
 			}
-			Ticket ticketCurrent = this.ticketService.findById(ticket.getId());
+			Ticket ticketCurrent = this.ticketService.findById(ticket.getId().intValue());
 			ticket.setStatus(ticket.getStatus());
-			ticket.setUser(userFromRequest(request));
-			ticket.setDate(ticketCurrent.getDate());
-			ticket.setNumber(ticketCurrent.getNumber());
-			if(ticketCurrent.getAssignedUser()!=null) {
-				ticket.setAssignedUser(ticketCurrent.getAssignedUser());
-			}
+//			ticket.setCreatedUser(userFromRequest(request).getId());
+//			ticket.setDate(ticketCurrent.getCreatedDate());
+//			ticket.setNumber(ticketCurrent.getNumber());
+//			if(ticketCurrent.getAssignedUser()!=null) {
+//				ticket.setAssignedUser(ticketCurrent.getAssignedUser());
+//			}
 			Ticket ticketPersisted = this.ticketService.createOrUpdate(ticket);
 			response.setData(ticketPersisted);
 		}catch(Exception e) {
@@ -132,33 +141,33 @@ public class TicketController {
 	@PreAuthorize("hasAnyRole('CUSTOMER','TECHNICIAN')")
 	public ResponseEntity<SingleResponse<Ticket>> findById(@PathVariable("id") String id){
 		SingleResponse<Ticket> response = new SingleResponse<Ticket>();
-		Ticket ticket = this.ticketService.findById(id);
+		Ticket ticket = this.ticketService.findById(new Integer(id));
 		if(ticket==null) {
 			response.getErrors().add("Register id not found "+ id);
 			return ResponseEntity.badRequest().body(response);
 		}
 		List<ChangeStatus> changes = new ArrayList<ChangeStatus>();
-		Iterable<ChangeStatus> changesCurrent = this.ticketService.listChangeStatus(ticket.getId());
-		changesCurrent.forEach((c) -> {
-			c.setTicket(null);
-			changes.add(c);
-		});
+//		Iterable<ChangeStatus> changesCurrent = this.ticketService.listChangeStatus(ticket.getId());
+//		changesCurrent.forEach((c) -> {
+//			c.setTicket(null);
+//			changes.add(c);
+//		});
 		
-		ticket.setChanges(changes);
+//		ticket.setChanges(changes);
 		response.setData(ticket);
 		return ResponseEntity.ok(response);
 	}
 	
 	@DeleteMapping(value="{id}")
 	@PreAuthorize("hasAnyRole('CUSTOMER')")
-	public ResponseEntity<Response<String>> delete(@PathVariable("id") String id){
+	public ResponseEntity<SingleResponse<String>> delete(@PathVariable("id") String id){
 		SingleResponse<String> response = new SingleResponse<String>();
-		Ticket ticket = this.ticketService.findById(id);
+		Ticket ticket = this.ticketService.findById(new Integer(id));
 		if(ticket==null) {
 			response.getErrors().add("Register id not found "+id);
 			return ResponseEntity.badRequest().body(response);
 		}
-		this.ticketService.delete(id);
+		this.ticketService.delete(new Integer(id));
 		return ResponseEntity.ok(response);
 	}
 	
@@ -168,8 +177,8 @@ public class TicketController {
 			@PathVariable("count") int count){
 		SingleResponse<Page<Ticket>> response = new SingleResponse<Page<Ticket>>();
 		Page<Ticket> tickets=null;
-		User userRequest = userFromRequest(request);
-		if(userRequest.getProfile().equals(ProfileEnum.ROLE_TECHNICIAN)) {
+		UserBO userRequest = userFromRequest(request);
+		if(userRequest.getRoleName().equals(ProfileEnum.ROLE_TECHNICIAN.toString())) {
 			tickets = this.ticketService.listTicket(page, count);
 		}else {
 			tickets = this.ticketService.findByCurrentUser(page, count, userRequest.getId());
@@ -199,15 +208,15 @@ public class TicketController {
 		if(number>0) {
 			tickets = this.ticketService.findByNumber(page, count, number);
 		}else {
-			User userRequest = userFromRequest(request);
-			if(userRequest.getProfile().equals(ProfileEnum.ROLE_TECHNICIAN)) {
+			UserBO userRequest = userFromRequest(request);
+			if(userRequest.getRoleName().equals(ProfileEnum.ROLE_TECHNICIAN.toString())) {
 				if(assigned) {
-					tickets = this.ticketService.findByParametersAndAssignedUser(page, count, title, status, priority, userRequest.getId());
+//					tickets = this.ticketService.findByParametersAndAssignedUser(page, count, title, status, priority, userRequest.getId());
 				}else {
 					tickets = this.ticketService.findByParameters(page, count, title, status, priority);
 				}
-			}else if(userRequest.getProfile().equals(ProfileEnum.ROLE_CUSTOMER)){
-				tickets = this.ticketService.findByParametersAndCurrentUser(page, count, title, status, priority, userRequest.getId());
+			}else if(userRequest.getRoleName().equals(ProfileEnum.ROLE_CUSTOMER.toString())){
+//				tickets = this.ticketService.findByParametersAndCurrentUser(page, count, title, status, priority, userRequest.getId());
 			}
 		}
 		
@@ -229,18 +238,23 @@ public class TicketController {
 		try {
 			validateChangeStatus(id, status, result);
 			if(result.hasErrors()) {
-				result.getAllErrors().forEach(error->response.getErrors().add(error.getDefaultMessage()));
+				List<ObjectError> errorList = result.getAllErrors();
+				List<String> strErrors = new ArrayList<String>();
+				for (ObjectError objectError: errorList)
+					strErrors.add(objectError.getDefaultMessage());
+				
+				response.setErrors(strErrors);
 				return ResponseEntity.badRequest().body(response);
 			}
-			Ticket ticketCurrent = this.ticketService.findById(id);
-			ticketCurrent.setStatus(StatusEnum.getStatus(status));
-			if(status.equals("Assigned"))ticketCurrent.setAssignedUser(userFromRequest(request));
+			Ticket ticketCurrent = this.ticketService.findById(Integer.parseInt(id));
+//			ticketCurrent.setStatus(StatusEnum.getStatus(status));
+//			if(status.equals("Assigned"))ticketCurrent.setAssignedUser(userFromRequest(request));
 			Ticket ticketPersisted= (Ticket) this.ticketService.createOrUpdate(ticketCurrent);
 			ChangeStatus changeStatus = new ChangeStatus();
-			changeStatus.setUserChange(userFromRequest(request));
-			changeStatus.setDateChangeStatus(new Date());
-			changeStatus.setStatus(StatusEnum.getStatus(status));
-			changeStatus.setTicket(ticketPersisted);
+//			changeStatus.setUserChange(userFromRequest(request));
+//			changeStatus.setDateChangeStatus(new Date());
+//			changeStatus.setStatus(StatusEnum.getStatus(status));
+//			changeStatus.setTicket(ticketPersisted);
 			this.ticketService.createChangeStatus(changeStatus);
 			response.setData(ticketPersisted);
 		}catch(Exception e){

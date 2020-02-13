@@ -14,6 +14,17 @@ public class Ticket extends CommonEntity {
 	@Column(name="title")
 	private String title;
 	
+	@Column(name="email")
+	private String email;
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Column(name="number")
 	private Integer number;
 	
