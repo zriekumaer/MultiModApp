@@ -6,6 +6,7 @@
 		<artifactId>MainAppPi</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	<groupId>com.ust.helpapp</groupId>
 	<artifactId>HelpdeskPi</artifactId>
 	<name>HelpdeskPi</name>
 	<dependencies>

@@ -6,6 +6,7 @@
 		<artifactId>MainAppPi</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
+	<groupId>com.ust.masterapp</groupId>
 	<artifactId>MasterPi</artifactId>
 	<name>MasterPi</name>
 	<dependencies>
@@ -16,4 +17,5 @@
 		</dependency>
 	</dependencies>
 
+	
 </project>

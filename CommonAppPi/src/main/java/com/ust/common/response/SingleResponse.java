@@ -3,6 +3,9 @@ package com.ust.common.response;
 public class SingleResponse<T> extends Response {
 	private T data;
 	
+	public SingleResponse() {
+	}
+	
 	public SingleResponse(T t) {
 		this.data = t;
 	}

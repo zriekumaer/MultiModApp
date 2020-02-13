@@ -40,7 +40,4 @@ public class ClientServiceImpl implements ClientService {
 	public boolean deleteClient(Long clientId) {
 		return clientDomain.deleteClient(clientId);
 	}
-	
-	
-	
 }

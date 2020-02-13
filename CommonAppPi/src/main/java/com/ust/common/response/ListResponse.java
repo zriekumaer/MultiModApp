@@ -1,19 +1,18 @@
 package com.ust.common.response;
 
-import java.util.List;
 
 public class ListResponse<T> extends Response {
-    private List<T> data;
+    private T data;
     
     public ListResponse(T t) {
     	this.data = t;
     }
 
-	public List<T> getData() {
+	public T getData() {
 		return data;
 	}
 
-	public void setData(List<T> data) {
+	public void setData(T data) {
 		this.data = data;
 	}
     

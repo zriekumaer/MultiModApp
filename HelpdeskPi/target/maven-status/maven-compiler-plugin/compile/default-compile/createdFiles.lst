@@ -1,0 +1,10 @@
+com\ust\helpapp\domain\impl\TicketDomainImpl.class
+com\ust\helpapp\domain\TicketDomain.class
+com\ust\helpapp\service\TicketService.class
+com\ust\helpapp\service\impl\TicketServiceImpl.class
+com\ust\helpapp\repo\TicketRepository.class
+com\ust\helpapp\entity\ChangeStatus.class
+com\ust\helpapp\repo\ChangeStatusRepository.class
+com\ust\helpapp\service\bo\Summary.class
+com\ust\helpapp\entity\Ticket.class
+com\ust\helpapp\ui\TicketController.class

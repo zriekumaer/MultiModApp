@@ -1,1 +1,17 @@
+com\ust\common\response\SingleResponse.class
 com\ust\common\entity\CommonEntity.class
+com\ust\common\enums\RoleNames.class
+com\ust\common\bo\Response.class
+com\ust\common\enums\StatusEnum.class
+com\ust\common\context\UserContext.class
+com\ust\common\enums\PriorityEnum.class
+com\ust\common\response\ObjectReference.class
+com\ust\common\bo\CommonBO.class
+com\ust\common\entity\UserEntity.class
+com\ust\common\response\Response.class
+com\ust\common\constants\AppConstant.class
+com\ust\common\response\ListResponse.class
+com\ust\common\enums\ProfileEnum.class
+com\ust\common\context\AppContext.class
+com\ust\common\response\ApiResponse.class
+com\ust\common\bo\SearchDTO.class

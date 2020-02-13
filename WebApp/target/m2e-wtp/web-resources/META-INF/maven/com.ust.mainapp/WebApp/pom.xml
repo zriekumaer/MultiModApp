@@ -15,8 +15,68 @@
 			<version>1.0.0.Final</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+			<groupId>com.ust.adminapp</groupId>
+			<artifactId>AdminAppPi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ust.bookapp</groupId>
+			<artifactId>BookingAppPi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ust.common</groupId>
+			<artifactId>CommonAppPi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ust.helpapp</groupId>
+			<artifactId>HelpdeskPi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.ust.inv</groupId>
+			<artifactId>InventoryAppPi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ust.invoice</groupId>
+			<artifactId>InvoiceAppPi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ust.masterapp</groupId>
+			<artifactId>MasterPi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ust.report</groupId>
+			<artifactId>ReportPi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ust.sales</groupId>
+			<artifactId>SalesAppPi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.ust.user</groupId>
+			<artifactId>UserMgmtPi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<finalName>WebApp</finalName>
 	</build>
