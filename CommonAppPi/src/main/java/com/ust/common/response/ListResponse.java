@@ -4,6 +4,10 @@ import java.util.List;
 
 public class ListResponse<T> extends Response {
     private List<T> data;
+    
+    public ListResponse(T t) {
+    	this.data = t;
+    }
 
 	public List<T> getData() {
 		return data;
